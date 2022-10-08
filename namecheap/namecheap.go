@@ -5,14 +5,15 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"github.com/hashicorp/go-cleanhttp"
-	"github.com/namecheap/go-namecheap-sdk/v2/namecheap/internal/syncretry"
-	"github.com/weppos/publicsuffix-go/publicsuffix"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strconv"
+
+	"github.com/hashicorp/go-cleanhttp"
+	"github.com/namecheap/go-namecheap-sdk/v2/namecheap/internal/syncretry"
+	"github.com/weppos/publicsuffix-go/publicsuffix"
 )
 
 const (
@@ -26,6 +27,8 @@ type ClientOptions struct {
 	ApiKey     string
 	ClientIp   string
 	UseSandbox bool
+	ProxyURL   string
+	Headers    map[string]string
 }
 
 type Client struct {
@@ -56,6 +59,13 @@ func NewClient(options *ClientOptions) *Client {
 		client.BaseURL = namecheapSandboxApiUrl
 	} else {
 		client.BaseURL = namecheapProductionApiUrl
+	}
+
+	if options.ProxyURL != "" {
+		proxyURL, _ := url.Parse(options.ProxyURL)
+		client.http.Transport = &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+		}
 	}
 
 	client.common.client = client
@@ -89,6 +99,12 @@ func (c *Client) NewRequest(body map[string]string) (*http.Request, error) {
 
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(rBody)))
+
+	if c.ClientOptions.Headers != nil {
+		for k, v := range c.ClientOptions.Headers {
+			req.Header.Add(k, v)
+		}
+	}
 
 	return req, nil
 }
