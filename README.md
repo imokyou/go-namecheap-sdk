@@ -1,6 +1,6 @@
 # Go Namecheap SDK
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/namecheap/go-namecheap-sdk.svg)](https://pkg.go.dev/github.com/namecheap/go-namecheap-sdk/v2)
+[![Go Reference](https://pkg.go.dev/badge/github.com/imokyou/go-namecheap-sdk.svg)](https://pkg.go.dev/github.com/imokyou/go-namecheap-sdk/v2)
 
 - [Namecheap API Documentation](https://www.namecheap.com/support/api/intro/)
 - [Sandbox](https://www.namecheap.com/support/knowledgebase/article.aspx/763/63/what-is-sandbox/)
@@ -8,14 +8,14 @@
 ### Getting
 
 ```sh
-$ go get github.com/namecheap/go-namecheap-sdk/v2
+$ go get github.com/imokyou/go-namecheap-sdk/v2
 ```
 
 ### Usage
 
 ```go
 import (
-    "github.com/namecheap/go-namecheap-sdk/v2"
+    "github.com/imokyou/go-namecheap-sdk/v2"
 )
 
 client := NewClient(&ClientOptions{
